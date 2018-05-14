@@ -4,6 +4,7 @@ import { Marker, Position } from 'nativescript-google-maps-sdk';
 import * as imageSource from "tns-core-modules/image-source";
 import { LocationService } from '../../services/location.service';
 import {Image} from "tns-core-modules/ui/image";
+import * as fs from "tns-core-modules/file-system";
 
 @Component({
     selector: "app-map",
@@ -26,6 +27,13 @@ export class MapComponent implements OnInit {
         this.marker = new Marker();
         this.mapView = map.object;
         let mapView = this.mapView;
+        var icon = new Image();
+        const folder = fs.knownFolders.currentApp();
+        const path = fs.path.join(folder.path, "assets/marker.png");
+        const imageFromLocalFile = imageSource.fromFile(path);
+        icon.imageSource = imageFromLocalFile;
+        console.log(imageFromLocalFile);
+        this.marker.icon= icon;
         this.marker.title = "Marker ";
         this.marker.position = Position.positionFromLatLng(this.loc.latitude, this.loc.longitude);
         mapView.addMarker(this.marker);
